@@ -1,0 +1,12 @@
+/home/anton/Code/Forum/DAL/bin/Debug/net5.0/DAL.deps.json
+/home/anton/Code/Forum/DAL/bin/Debug/net5.0/DAL.dll
+/home/anton/Code/Forum/DAL/bin/Debug/net5.0/ref/DAL.dll
+/home/anton/Code/Forum/DAL/bin/Debug/net5.0/DAL.pdb
+/home/anton/Code/Forum/DAL/obj/Debug/net5.0/DAL.csprojAssemblyReference.cache
+/home/anton/Code/Forum/DAL/obj/Debug/net5.0/DAL.GeneratedMSBuildEditorConfig.editorconfig
+/home/anton/Code/Forum/DAL/obj/Debug/net5.0/DAL.AssemblyInfoInputs.cache
+/home/anton/Code/Forum/DAL/obj/Debug/net5.0/DAL.AssemblyInfo.cs
+/home/anton/Code/Forum/DAL/obj/Debug/net5.0/DAL.csproj.CoreCompileInputs.cache
+/home/anton/Code/Forum/DAL/obj/Debug/net5.0/DAL.dll
+/home/anton/Code/Forum/DAL/obj/Debug/net5.0/ref/DAL.dll
+/home/anton/Code/Forum/DAL/obj/Debug/net5.0/DAL.pdb

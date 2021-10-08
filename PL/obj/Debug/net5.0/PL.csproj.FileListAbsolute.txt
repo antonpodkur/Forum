@@ -61,3 +61,5 @@
 /home/anton/Code/Forum/PL/obj/Debug/net5.0/PL.genruntimeconfig.cache
 /home/anton/Code/Forum/PL/bin/Debug/net5.0/Humanizer.dll
 /home/anton/Code/Forum/PL/bin/Debug/net5.0/Microsoft.EntityFrameworkCore.Design.dll
+/home/anton/Code/Forum/PL/bin/Debug/net5.0/BLL.dll
+/home/anton/Code/Forum/PL/bin/Debug/net5.0/BLL.pdb

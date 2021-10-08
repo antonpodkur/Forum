@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace PL.Migrations
+namespace DAL.Migrations
 {
     public partial class Init1 : Migration
     {
@@ -25,6 +25,16 @@ namespace PL.Migrations
                 table: "Users",
                 columns: new[] { "Id", "Email", "Name", "Password" },
                 values: new object[] { 1, "dima@gmail.com", "Dima", "123" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "Name", "Password" },
+                values: new object[] { 2, "Vlad@gmail.com", "Vlad", "1234" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "Name", "Password" },
+                values: new object[] { 3, "Alex@gmail.com", "Alex", "12345" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

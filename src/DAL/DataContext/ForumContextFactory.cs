@@ -1,16 +1,15 @@
-using DAL.DataContext.DataContext;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.DataContext
 {
-    public class ForumContextFactory : IDesignTimeDbContextFactory<ForumContext>
+    public class ForumContextFactory: IDesignTimeDbContextFactory<ForumContext>
     {
         public ForumContext CreateDbContext(string[] args)
         {
-            AppConfiguration appConfig = new AppConfiguration();
+            AppConfiguration appConfiguration = new AppConfiguration();
             var opsBuilder = new DbContextOptionsBuilder<ForumContext>();
-            opsBuilder.UseSqlServer(appConfig.SqlConnectionString);
+            opsBuilder.UseSqlServer(appConfiguration.SqlConnectionString);
             return new ForumContext(opsBuilder.Options);
         }
     }

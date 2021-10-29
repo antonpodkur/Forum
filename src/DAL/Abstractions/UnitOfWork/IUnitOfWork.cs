@@ -1,7 +1,7 @@
 using System;
-using DAL.Repositories.Interfaces;
+using DAL.Abstractions.Repositories;
 
-namespace DAL.UnitOfWork
+namespace DAL.Abstractions.UnitOfWork
 {
     public interface IUnitOfWork: IDisposable
     {

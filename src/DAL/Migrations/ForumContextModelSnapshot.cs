@@ -3,24 +3,22 @@ using DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(ForumContext))]
-    [Migration("20211008133000_Init1")]
-    partial class Init1
+    partial class ForumContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.10")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DAL.DataContext.Entities.User", b =>
+            modelBuilder.Entity("DAL.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,41 +27,53 @@ namespace DAL.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(320)
+                        .HasColumnType("nvarchar(320)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Nickname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("Nickname")
+                        .IsUnique();
 
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Email = "dima@gmail.com",
-                            Name = "Dima",
-                            Password = "123"
+                            Id = 2,
+                            Email = "johndoe@gmail.com",
+                            Nickname = "Johnie",
+                            Password = "123456"
                         },
                         new
                         {
-                            Id = 2,
-                            Email = "Vlad@gmail.com",
-                            Name = "Vlad",
-                            Password = "1234"
+                            Id = 1,
+                            Email = "janedoe@gmail.com",
+                            Nickname = "Janie",
+                            Password = "123456"
                         },
                         new
                         {
                             Id = 3,
-                            Email = "Alex@gmail.com",
-                            Name = "Alex",
-                            Password = "12345"
+                            Email = "myemail@gmail.com",
+                            Nickname = "My",
+                            Password = "1234567"
                         });
                 });
 #pragma warning restore 612, 618

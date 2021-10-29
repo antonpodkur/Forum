@@ -1,9 +1,7 @@
-using System;
 using System.IO;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 
-namespace DAL.DataContext.DataContext
+namespace DAL.DataContext
 {
     public class AppConfiguration
     {
@@ -13,11 +11,10 @@ namespace DAL.DataContext.DataContext
             var path = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
             configBuilder.AddJsonFile(path, false);
             var root = configBuilder.Build();
-            var appSetting = root.GetSection("ConnectionStrings:DefaultConnection");
-            SqlConnectionString = appSetting.Value;
+            var appSettings = root.GetSection("ConnectionStrings:DefaultConnection");
+            SqlConnectionString = appSettings.Value;
         }
         
-        public string SqlConnectionString { get; set; }
-        
+        public string SqlConnectionString { get; }
     }
 }

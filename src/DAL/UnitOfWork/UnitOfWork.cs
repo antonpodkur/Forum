@@ -1,11 +1,11 @@
+using DAL.Abstractions.Repositories;
+using DAL.Abstractions.UnitOfWork;
 using DAL.DataContext;
-using DAL.DataContext.Entities;
 using DAL.Repositories;
-using DAL.Repositories.Interfaces;
 
 namespace DAL.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork: IUnitOfWork
     {
         private readonly ForumContext _context;
 

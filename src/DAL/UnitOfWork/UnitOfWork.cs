@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using DAL.Abstractions.Repositories;
 using DAL.Abstractions.UnitOfWork;
 using DAL.DataContext;
@@ -13,6 +14,7 @@ namespace DAL.UnitOfWork
         {
             _context = context;
             Users = new UserRepository(_context);
+            Posts = new PostRepository(_context);
         }
         
         public void Dispose()
@@ -21,9 +23,10 @@ namespace DAL.UnitOfWork
         }
 
         public IUserRepository Users { get; }
-        public int Complete()
+        public IPostRepository Posts { get; }
+        public async Task<int> CompleteAsync()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
     }
 }

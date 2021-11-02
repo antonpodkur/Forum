@@ -27,6 +27,7 @@ namespace DAL.DataContext
         public static OptionsBuild ops = new OptionsBuild();
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -38,6 +39,7 @@ namespace DAL.DataContext
             base.OnModelCreating(modelBuilder);
             
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new PostConfiguration());
         }
     }
 }

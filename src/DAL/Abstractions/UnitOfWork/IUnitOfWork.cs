@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using DAL.Abstractions.Repositories;
 
 namespace DAL.Abstractions.UnitOfWork
@@ -6,6 +7,7 @@ namespace DAL.Abstractions.UnitOfWork
     public interface IUnitOfWork: IDisposable
     {
         IUserRepository Users { get; }
-        int Complete();
+        IPostRepository Posts { get; }
+        Task<int> CompleteAsync();
     }
 }

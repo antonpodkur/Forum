@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DAL.Abstractions.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,9 +21,9 @@ namespace DAL.Repositories
             return Context.Set<TEntity>().Find(id);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return Context.Set<TEntity>().ToList();
+            return await Context.Set<TEntity>().ToListAsync();
         }
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)

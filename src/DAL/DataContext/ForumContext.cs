@@ -28,11 +28,6 @@ namespace DAL.DataContext
 
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(ops.OpsBuilder);
-        }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

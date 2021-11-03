@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "6dXr9ABSZxaSqloSt6dI73qUPtKHWyHiW6MIrMyzX0Sgt3UGpx4TH01CnOwj1O0rUu1ZAPjdKsLvTswsRzJ5Ug==",
+  "dgSpecHash": "w7KSCgva61xGlFyjAsm/O1G/zc30qe+//uNx2IiVndk10V0Sr0xJ6thRU4I5RIpcPYMli2mda+5p84/RT9uh0g==",
   "success": true,
   "projectFilePath": "/home/anton/Documents/Forum/src/BLL/BLL.csproj",
   "expectedPackageFiles": [
     "/home/anton/.nuget/packages/automapper/10.1.1/automapper.10.1.1.nupkg.sha512",
+    "/home/anton/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/8.1.1/automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
     "/home/anton/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
     "/home/anton/.nuget/packages/microsoft.data.sqlclient/2.0.1/microsoft.data.sqlclient.2.0.1.nupkg.sha512",
     "/home/anton/.nuget/packages/microsoft.data.sqlclient.sni.runtime/2.0.1/microsoft.data.sqlclient.sni.runtime.2.0.1.nupkg.sha512",
@@ -21,6 +22,7 @@
     "/home/anton/.nuget/packages/microsoft.extensions.configuration.json/5.0.0/microsoft.extensions.configuration.json.5.0.0.nupkg.sha512",
     "/home/anton/.nuget/packages/microsoft.extensions.dependencyinjection/5.0.2/microsoft.extensions.dependencyinjection.5.0.2.nupkg.sha512",
     "/home/anton/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/5.0.0/microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
+    "/home/anton/.nuget/packages/microsoft.extensions.dependencymodel/5.0.0/microsoft.extensions.dependencymodel.5.0.0.nupkg.sha512",
     "/home/anton/.nuget/packages/microsoft.extensions.fileproviders.abstractions/5.0.0/microsoft.extensions.fileproviders.abstractions.5.0.0.nupkg.sha512",
     "/home/anton/.nuget/packages/microsoft.extensions.fileproviders.physical/5.0.0/microsoft.extensions.fileproviders.physical.5.0.0.nupkg.sha512",
     "/home/anton/.nuget/packages/microsoft.extensions.filesystemglobbing/5.0.0/microsoft.extensions.filesystemglobbing.5.0.0.nupkg.sha512",

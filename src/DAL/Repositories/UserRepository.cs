@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using DAL.Abstractions.Repositories;
+using DAL.DataContext;
 using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,7 @@ namespace DAL.Repositories
 {
     public class UserRepository: Repository<User>, IUserRepository
     {
-        public UserRepository(DbContext context) : base(context) { }
+        public UserRepository(ForumContext context) : base(context) { }
         public async Task<User> GetByIdAsync(string id)
         {
             var user = await Context.Set<User>().FindAsync(id);

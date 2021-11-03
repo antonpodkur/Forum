@@ -1,0 +1,14 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace API.Auth
+{
+    public class AuthForumContext: IdentityDbContext<IdentityUser>
+    {
+        public AuthForumContext(DbContextOptions<AuthForumContext> options) : base(options)
+        {
+            Database.EnsureCreated();
+        }
+    }
+}

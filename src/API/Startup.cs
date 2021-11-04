@@ -40,6 +40,22 @@ namespace API
 
             services.AddDal(Configuration.GetConnectionString("DefaultConnection"));
             services.AddBll();
+            
+            
+            var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+
+            var tokenValidationParams = new TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateActor = false,
+                ValidateLifetime = true,
+                ValidateAudience = false,
+                RequireExpirationTime = false,
+            };
+
+            services.AddSingleton(tokenValidationParams);
 
             services.Configure<JwtConfiguration>(Configuration.GetSection("JwtConfig"));
 
@@ -51,19 +67,8 @@ namespace API
             })
                 .AddJwtBearer(jwt =>
                 {
-                    var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
-
                     jwt.SaveToken = true;
-                    jwt.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateActor = false,
-                        ValidateLifetime = true,
-                        RequireExpirationTime = false,
-                        ValidateAudience = false
-                    };
+                    jwt.TokenValidationParameters = tokenValidationParams;
                 });
             
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

@@ -4,14 +4,16 @@ using API.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(AuthForumContext))]
-    partial class AuthForumContextModelSnapshot : ModelSnapshot
+    [Migration("20211104154127_Added refresh tokens table")]
+    partial class Addedrefreshtokenstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,7 +37,7 @@ namespace API.Migrations
                     b.Property<bool>("IsRevoked")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsUsed")
+                    b.Property<bool>("IsUser")
                         .HasColumnType("bit");
 
                     b.Property<string>("JwtId")

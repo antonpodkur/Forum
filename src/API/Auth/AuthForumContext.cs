@@ -10,5 +10,7 @@ namespace API.Auth
         {
             Database.EnsureCreated();
         }
+        
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }

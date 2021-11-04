@@ -193,7 +193,7 @@ namespace API.Controllers
             {
                 JwtId = token.Id,
                 IsUsed = false,
-                IsRevoked = false,
+                IsRevorked = false,
                 UserId = user.Id,
                 AddedDate = DateTime.UtcNow,
                 ExpiryDate = DateTime.UtcNow.AddMonths(6),
@@ -221,13 +221,11 @@ namespace API.Controllers
                     out var validatedToken);
 
                 // validation 2 - validate encryption alg
-                if (validatedToken is JwtSecurityToken jwtSecurityToken)
+                if(validatedToken is JwtSecurityToken jwtSecurityToken)
                 {
-                    var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature,
-                        StringComparison.InvariantCultureIgnoreCase);
+                    var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
 
-                    if (result == false)
-                    {
+                    if(result == false) {
                         return null;
                     }
                 }
@@ -251,7 +249,7 @@ namespace API.Controllers
                 }
                 
                 // validation 4 - validate existance of the token
-                var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokenRequest.Token);
+                var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokenRequest.RefreshToken);
 
                 if (storedToken == null)
                 {
@@ -279,7 +277,7 @@ namespace API.Controllers
                 }
                 
                 // validation 6 - validate if revoked
-                if (storedToken.IsRevoked)
+                if (storedToken.IsRevorked)
                 {
                     return new AuthResult()
                     {
@@ -325,8 +323,9 @@ namespace API.Controllers
 
         private DateTime UnixTimeStampToDateTime(long unixTimeStamp)
         {
-            var dateTimeVal = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTimeVal = dateTimeVal.AddSeconds(unixTimeStamp).ToLocalTime();
+            var dateTimeVal = new DateTime(1970,  1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTimeVal = dateTimeVal.AddSeconds(unixTimeStamp).ToUniversalTime();
+
             return dateTimeVal;
         }
 

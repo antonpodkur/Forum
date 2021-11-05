@@ -43,16 +43,20 @@ namespace API
             
             
             var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+            var issuer = Configuration["JwtConfig:Issuer"];
+            var audience = Configuration["JwtConfig:Audience"];
 
             var tokenValidationParams = new TokenValidationParameters()
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
+                ValidateIssuer = true,
                 ValidateActor = false,
                 ValidateLifetime = true,
-                ValidateAudience = false,
-                RequireExpirationTime = false,
+                ValidateAudience = true,
+                ValidIssuer = issuer,
+                ValidAudience = audience,
+                RequireExpirationTime = true,
             };
 
             services.AddSingleton(tokenValidationParams);
@@ -71,7 +75,7 @@ namespace API
                     jwt.TokenValidationParameters = tokenValidationParams;
                 });
             
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AuthForumContext>().AddDefaultTokenProviders();
             
 

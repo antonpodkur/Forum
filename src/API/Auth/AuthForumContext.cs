@@ -8,7 +8,6 @@ namespace API.Auth
     {
         public AuthForumContext(DbContextOptions<AuthForumContext> options) : base(options)
         {
-            Database.EnsureCreated();
         }
         
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }

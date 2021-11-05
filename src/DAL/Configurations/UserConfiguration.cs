@@ -1,3 +1,4 @@
+using System;
 using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -24,30 +25,6 @@ namespace DAL.Configurations
             builder.HasMany(x => x.Posts);
             builder.HasMany(x => x.Posts).WithOne(p => p.User).HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasData(
-                new User()
-                {
-                    Id = 2,
-                    Nickname = "Johnie",
-                    Email = "johndoe@gmail.com",
-                    Password = "123456"
-                },
-                new User()
-                {
-                    Id = 1,
-                    Nickname = "Janie",
-                    Email = "janedoe@gmail.com",
-                    Password = "123456"
-                },
-                new User()
-                {
-                    Id = 3,
-                    Nickname = "My",
-                    Email = "myemail@gmail.com",
-                    Password = "1234567"
-                }
-            );
         }
     }
 }

@@ -9,6 +9,10 @@ using API.Auth;
 using API.Auth.DTOs.Requests;
 using API.Auth.DTOs.Responses;
 using API.Configuration;
+using AutoMapper;
+using BLL.Abstractions;
+using BLL.DTOs;
+using BLL.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,19 +26,31 @@ namespace API.Controllers
     public class AuthController: ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JwtConfiguration _jwtConfiguration;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly AuthForumContext _context;
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
         public AuthController(UserManager<IdentityUser> userManager, 
+            SignInManager<IdentityUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
             IOptionsMonitor<JwtConfiguration> optionsMonitor, 
             TokenValidationParameters tokenValidationParameters,
-            AuthForumContext context)
+            AuthForumContext context,
+            IUserService userService,
+            IMapper mapper)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
             _jwtConfiguration = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
             _context = context;
+            _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -59,10 +75,27 @@ namespace API.Controllers
 
                 var newUser = new IdentityUser() {Email = user.Email, UserName = user.Username};
                 var isCreated = await _userManager.CreateAsync(newUser, user.Password);
+
+                if (newUser.Email == "admin@gmail.com")
+                {
+                    await CreateRole(Roles.Admin);
+                    await _userManager.AddToRoleAsync(newUser, Roles.Admin);
+                }
+
+                var userDto = new UserDTO()
+                {
+                    Id = newUser.Id,
+                    Nickname = user.Username,
+                    Email = user.Email,
+                    Password = user.Password
+                };
+
+                userDto = await _userService.AddAsync(userDto);
+                
                 if (isCreated.Succeeded)
                 {
                     var jwtToken = await GenerateJwtToken(newUser);
-                    return Ok(jwtToken);
+                    return Ok(new {user = userDto, jwtToken});
                 }
                 else
                 {
@@ -118,9 +151,11 @@ namespace API.Controllers
                     });
                 }
 
+                var userDto = await _userService.GetByIdAsync(existingUser.Id); 
+
                 var jwtToken = await GenerateJwtToken(existingUser);
 
-                return Ok(jwtToken);
+                return Ok(new {user = userDto, jwtToken});
             }
             
             return BadRequest( new RegistrationResponse()
@@ -173,15 +208,26 @@ namespace API.Controllers
 
             var key = Encoding.ASCII.GetBytes(_jwtConfiguration.Secret);
 
+            List<Claim> claims = new List<Claim>()
+            {
+                new Claim("Id", user.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                Subject = new ClaimsIdentity(new []
-                {
-                    new Claim("Id",user.Id),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                }),
+                Subject = new ClaimsIdentity(claims),
+                Audience = _jwtConfiguration.Audience,
+                Issuer = _jwtConfiguration.Issuer,
                 Expires = DateTime.UtcNow.AddSeconds(30), // 5-10 mins 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature) 
             };
@@ -334,6 +380,15 @@ namespace API.Controllers
             var random = new Random();
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
             return new string(Enumerable.Repeat(chars, length).Select(x => x[random.Next(x.Length)]).ToArray());
+        }
+
+        private async Task CreateRole(string name)
+        {
+            var doesRoleExist = await _roleManager.RoleExistsAsync(name);
+            if (!doesRoleExist)
+            {
+                await _roleManager.CreateAsync(new IdentityRole(name));
+            }
         }
         
         

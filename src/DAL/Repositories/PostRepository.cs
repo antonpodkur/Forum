@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using DAL.Abstractions.Repositories;
 using DAL.DataContext;
@@ -9,9 +10,9 @@ namespace DAL.Repositories
     public class PostRepository: Repository<Post>, IPostRepository
     {
         public PostRepository(ForumContext context) : base(context) {}
-        public async Task<Post> GetByIdAsync(int id)
+        public async Task<Post> GetByIdAsync(string id)
         {
-            var post = await Context.Set<Post>().FindAsync(id);
+            var post = await Context.Set<Post>().FindAsync(new Guid(id));
             return post;
         }
 

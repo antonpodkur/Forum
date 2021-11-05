@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using DAL.Abstractions.Repositories;
 using DAL.DataContext;
@@ -11,8 +12,11 @@ namespace DAL.Repositories
         public UserRepository(ForumContext context) : base(context) { }
         public async Task<User> GetByIdAsync(string id)
         {
-            var user = await Context.Set<User>().FindAsync(id);
-            await Context.Entry(user).Collection(u => u.Posts).LoadAsync();
+            var user = await Context.Set<User>().FindAsync(new Guid(id));
+            if (user != null)
+            {
+                await Context.Entry(user).Collection(u => u.Posts).LoadAsync();
+            }
             return user;
         }
 

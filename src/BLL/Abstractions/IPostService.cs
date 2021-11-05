@@ -8,8 +8,8 @@ namespace BLL.Abstractions
     {
         Task<PostDTO> AddAsync(PostDTO postDto);
         Task<IEnumerable<PostDTO>> GetAllAsync();
-        Task<PostDTO> GetByIdAsync(int id);
+        Task<PostDTO> GetByIdAsync(string id);
         Task UpdateAsync(PostDTO postDto);
-        Task RemoveAsync(int id);
+        Task RemoveAsync(string id);
     }
 }

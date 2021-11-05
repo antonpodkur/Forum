@@ -35,7 +35,7 @@ namespace BLL.Services
             return postDtos;
         }
 
-        public async Task<PostDTO> GetByIdAsync(int id)
+        public async Task<PostDTO> GetByIdAsync(string id)
         {
             var post = await _unitOfWork.Posts.GetByIdAsync(id);
             var postDto = _mapper.Map<PostDTO>(post);
@@ -49,14 +49,14 @@ namespace BLL.Services
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task RemoveAsync(int id)
+        public async Task RemoveAsync(string id)
         {
             var post = await _unitOfWork.Posts.GetByIdAsync(id);
             _unitOfWork.Posts.Remove(post);
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<Post> GetPostByIdAsync(int id)
+        public async Task<Post> GetPostByIdAsync(string id)
         {
             return await _unitOfWork.Posts.GetByIdAsync(id);
         }

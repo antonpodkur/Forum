@@ -5,7 +5,7 @@ namespace DAL.Abstractions.Repositories
 {
     public interface IPostRepository : IRepository<Post>
     {
-        Task<Post> GetByIdAsync(int id);
+        Task<Post> GetByIdAsync(string id);
 
         void Update(Post post);
     }

@@ -16,9 +16,9 @@ namespace DAL.Repositories
         {
             Context = context;
         }
-        public TEntity Get(int id)
+        public TEntity Get(string id)
         {
-            return Context.Set<TEntity>().Find(id);
+            return Context.Set<TEntity>().Find(new Guid(id));
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()

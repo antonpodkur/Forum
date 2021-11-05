@@ -5,7 +5,7 @@ namespace BLL.DTOs
 {
     public class PostDTO
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required]
         public string Title { get; set; }
         public string Body { get; set; }

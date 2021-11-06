@@ -75,10 +75,9 @@ namespace API
                     jwt.TokenValidationParameters = tokenValidationParams;
                 });
             
-            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<AuthUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AuthForumContext>().AddDefaultTokenProviders();
             
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

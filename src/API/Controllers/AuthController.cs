@@ -25,8 +25,8 @@ namespace API.Controllers
     [ApiController]
     public class AuthController: ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<AuthUser> _userManager;
+        private readonly SignInManager<AuthUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JwtConfiguration _jwtConfiguration;
         private readonly TokenValidationParameters _tokenValidationParameters;
@@ -34,8 +34,8 @@ namespace API.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AuthController(UserManager<IdentityUser> userManager, 
-            SignInManager<IdentityUser> signInManager,
+        public AuthController(UserManager<AuthUser> userManager, 
+            SignInManager<AuthUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             IOptionsMonitor<JwtConfiguration> optionsMonitor, 
             TokenValidationParameters tokenValidationParameters,
@@ -73,27 +73,29 @@ namespace API.Controllers
                     });
                 }
 
-                var newUser = new IdentityUser() {Email = user.Email, UserName = user.Username};
+                var newUser = new AuthUser() {Email = user.Email, UserName = user.Username};
                 var isCreated = await _userManager.CreateAsync(newUser, user.Password);
 
-                if (newUser.Email == "admin@gmail.com")
-                {
-                    await CreateRole(Roles.Admin);
-                    await _userManager.AddToRoleAsync(newUser, Roles.Admin);
-                }
-
-                var userDto = new UserDTO()
-                {
-                    Id = newUser.Id,
-                    Nickname = user.Username,
-                    Email = user.Email,
-                    Password = user.Password
-                };
-
-                userDto = await _userService.AddAsync(userDto);
-                
                 if (isCreated.Succeeded)
                 {
+                    // admin section
+                    if (newUser.Email == "admin@gmail.com")
+                    {
+                        await CreateRole(Roles.Admin);
+                        await _userManager.AddToRoleAsync(newUser, Roles.Admin);
+                    }
+                    // end of admin section
+                    
+                    var userDto = new UserDTO() //creating and adding user to my db
+                    {
+                        Id = newUser.Id,
+                        Nickname = user.Username,
+                        Email = user.Email,
+                        Password = user.Password
+                    };
+
+                    userDto = await _userService.AddAsync(userDto);
+                    
                     var jwtToken = await GenerateJwtToken(newUser);
                     return Ok(new {user = userDto, jwtToken});
                 }
@@ -202,7 +204,7 @@ namespace API.Controllers
         }
         
 
-        private async Task<AuthResult> GenerateJwtToken(IdentityUser user)
+        private async Task<AuthResult> GenerateJwtToken(AuthUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -228,7 +230,7 @@ namespace API.Controllers
                 Subject = new ClaimsIdentity(claims),
                 Audience = _jwtConfiguration.Audience,
                 Issuer = _jwtConfiguration.Issuer,
-                Expires = DateTime.UtcNow.AddSeconds(30), // 5-10 mins 
+                Expires = DateTime.UtcNow.AddMinutes(10), // 5-10 mins 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature) 
             };
 

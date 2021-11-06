@@ -15,7 +15,6 @@ namespace API.Auth
         public DateTime AddedDate { get; set; }
         public DateTime ExpiryDate { get; set; }
         
-        [ForeignKey(nameof(UserId))]
-        public IdentityUser User { get; set; }
+        public AuthUser User { get; set; }
     }
 }

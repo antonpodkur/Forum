@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace API.Auth
@@ -5,6 +7,7 @@ namespace API.Auth
     public class AuthUser: IdentityUser
     {
         public AuthUser() { }
-        public AuthUser(string userName): base(userName) { }
+        
+        public ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 }

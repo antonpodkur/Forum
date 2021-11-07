@@ -8,6 +8,7 @@ namespace DAL.Abstractions.UnitOfWork
     {
         IUserRepository Users { get; }
         IPostRepository Posts { get; }
+        ICommentRepository Comments { get; }
         Task<int> CompleteAsync();
     }
 }

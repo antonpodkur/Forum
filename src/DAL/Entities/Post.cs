@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace DAL.Entities
 {
@@ -10,5 +12,7 @@ namespace DAL.Entities
         
         public Guid UserId { get; set; }
         public User User { get; set; }
+        
+        public ICollection<Comment> Comments { get; set; }
     }
 }

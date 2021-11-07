@@ -15,6 +15,7 @@ namespace DAL
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IPostRepository, PostRepository>();
+            services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork.UnitOfWork>();
         }
     }

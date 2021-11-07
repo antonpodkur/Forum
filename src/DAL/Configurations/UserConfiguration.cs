@@ -25,6 +25,9 @@ namespace DAL.Configurations
             builder.HasMany(x => x.Posts);
             builder.HasMany(x => x.Posts).WithOne(p => p.User).HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(u => u.Comments).WithOne(c => c.User).HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ForumContext))]
-    [Migration("20211105084219_minor fixes")]
-    partial class minorfixes
+    [Migration("20211106235341_AddedComments1")]
+    partial class AddedComments1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

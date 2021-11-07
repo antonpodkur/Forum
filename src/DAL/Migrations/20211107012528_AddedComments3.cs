@@ -2,7 +2,7 @@
 
 namespace DAL.Migrations
 {
-    public partial class minorfixes : Migration
+    public partial class AddedComments3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

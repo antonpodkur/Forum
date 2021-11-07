@@ -45,6 +45,7 @@ namespace API.Controllers
             return Ok(postDto);
         }
 
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetAllPosts()
         {
             return Ok(await _postService.GetAllAsync());

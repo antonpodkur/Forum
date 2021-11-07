@@ -18,12 +18,9 @@ namespace DAL.Configurations
 
             builder.Property(p => p.Body).HasMaxLength(40000);
 
-            
-            /*
-            builder.Property(p => p.User).IsRequired();
-            
-            builder.Property(p => p.UserId).IsRequired();
-            */
+            builder.HasMany(c => c.Comments).WithOne(c => c.Post).HasForeignKey(c => c.PostId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

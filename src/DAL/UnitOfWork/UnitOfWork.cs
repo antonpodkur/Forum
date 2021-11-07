@@ -16,6 +16,7 @@ namespace DAL.UnitOfWork
             _context = context;
             Users = new UserRepository(_context);
             Posts = new PostRepository(_context);
+            Comments = new CommentRepository(_context);
         }
         
         public void Dispose()
@@ -25,6 +26,7 @@ namespace DAL.UnitOfWork
 
         public IUserRepository Users { get; }
         public IPostRepository Posts { get; }
+        public  ICommentRepository Comments { get; }
         public async Task<int> CompleteAsync()
         {
             return await _context.SaveChangesAsync();

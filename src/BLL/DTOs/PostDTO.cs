@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using DAL.Entities;
 
@@ -13,5 +14,7 @@ namespace BLL.DTOs
         
         public Guid UserId { get; set; }
         public User User { get; set; }
+        
+        public ICollection<Comment> Comments { get; set; } 
     }
 }

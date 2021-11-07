@@ -9,9 +9,10 @@ namespace BLL
     {
         public static void AddBll(this IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(PostProfile), typeof(UserProfile));
+            services.AddAutoMapper(typeof(PostProfile), typeof(UserProfile), typeof(CommentProfile));
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IPostService, PostService>();
+            services.AddTransient<ICommentService, CommentService>();
         }
     }
 }

@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BLL.Abstractions;
 using BLL.DTOs;
+using DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -56,6 +58,14 @@ namespace API.Controllers
         public async Task<ActionResult<PostDTO>> GetPostById(string id)
         {
             return Ok(await _postService.GetByIdAsync(id));
+        }
+
+        [HttpGet("comments/{id}")]
+        public async Task<ActionResult<IEnumerable<Comment>>> GetComments(string id)
+        {
+            var postDto = await _postService.GetByIdAsync(id);
+            var comments = postDto.Comments.ToList();
+            return Ok(comments);
         }
 
         [HttpDelete("{id}")]

@@ -13,6 +13,11 @@ namespace DAL.Repositories
         public async Task<Post> GetByIdAsync(string id)
         {
             var post = await Context.Set<Post>().FindAsync(new Guid(id));
+            
+            if (post != null)
+            {
+                await Context.Entry(post).Collection(p => p.Comments).LoadAsync();
+            }
             return post;
         }
 

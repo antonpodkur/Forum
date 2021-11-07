@@ -16,6 +16,7 @@ namespace DAL.Repositories
             if (user != null)
             {
                 await Context.Entry(user).Collection(u => u.Posts).LoadAsync();
+                await Context.Entry(user).Collection(u => u.Comments).LoadAsync();
             }
             return user;
         }

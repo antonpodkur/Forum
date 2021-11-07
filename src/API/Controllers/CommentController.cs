@@ -49,14 +49,13 @@ namespace API.Controllers
             return Ok(commentDto);
         }
 
-        [HttpGet("{postId}")]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetPostComments(string postId)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetAll()
         {
-            var post = await _postService.GetByIdAsync(postId);
-            return Ok(post.Comments);
+            var comments = await _commentService.GetAllAsync();
+            return Ok(comments);
         }
-        //TODO: complete httpget/postid, httpget - return all, check 'Delete comment by id'
-        //TODO: make Post load comments.
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCommentById(string id)
         {

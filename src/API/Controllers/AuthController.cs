@@ -91,11 +91,11 @@ namespace API.Controllers
                         Id = newUser.Id,
                         Nickname = user.Username,
                         Email = user.Email,
-                        Password = user.Password
                     };
 
                     userDto = await _userService.AddAsync(userDto);
-                    
+
+
                     var jwtToken = await GenerateJwtToken(newUser);
                     return Ok(new {user = userDto, jwtToken});
                 }

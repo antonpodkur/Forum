@@ -21,4 +21,10 @@
     <ProjectReference Include="..\DAL\DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="client\package.json" />
+    <_ContentIncludedByDefault Remove="client\public\manifest.json" />
+    <_ContentIncludedByDefault Remove="client\tsconfig.json" />
+  </ItemGroup>
+
 </Project>

@@ -20,8 +20,6 @@ namespace DAL.Configurations
             builder.Property(s => s.Email).IsRequired(true).HasMaxLength(320);
             builder.HasIndex(e => e.Email).IsUnique();
             
-            builder.Property(s => s.Password).IsRequired(true).HasMaxLength(255);
-            
             builder.HasMany(x => x.Posts);
             builder.HasMany(x => x.Posts).WithOne(p => p.User).HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Cascade);

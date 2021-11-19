@@ -14,8 +14,8 @@ namespace DAL.Configurations
             builder.Property(u => u.Id).IsRequired();
             builder.HasIndex(u => u.Id).IsUnique();
             
-            builder.Property(s => s.Nickname).IsRequired(true).HasMaxLength(50);
-            builder.HasIndex(e => e.Nickname).IsUnique();
+            builder.Property(s => s.Username).IsRequired(true).HasMaxLength(50);
+            builder.HasIndex(e => e.Username).IsUnique();
             
             builder.Property(s => s.Email).IsRequired(true).HasMaxLength(320);
             builder.HasIndex(e => e.Email).IsUnique();

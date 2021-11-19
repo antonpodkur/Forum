@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using API.Auth;
@@ -89,7 +90,7 @@ namespace API.Controllers
                     var userDto = new UserDTO() //creating and adding user to my db
                     {
                         Id = newUser.Id,
-                        Nickname = user.Username,
+                        Username = user.Username,
                         Email = user.Email,
                     };
 
@@ -178,19 +179,23 @@ namespace API.Controllers
             {
                 var result = await VerifyAndGenerateToken(tokenRequest);
 
-                if (result == null)
+                if (result == null || result.Success == false)
                 {
-                    return BadRequest(new RegistrationResponse()
-                    {
-                        Errors = new List<string>()
-                        {
-                            "Invalid tokens"
-                        },
-                        Success = false
-                    });
+                    return BadRequest(new { jwtToken = result });
                 }
+                
+                var jwtTokenHandler = new JwtSecurityTokenHandler();
+                
+                var tokenVerification = jwtTokenHandler.ValidateToken(tokenRequest.Token, _tokenValidationParameters,
+                    out var validatedToken);
 
-                return Ok(result);
+                var userId = tokenVerification.Claims
+                    .FirstOrDefault(x => x.Type == "Id").Value;
+
+                var userDto = await _userService.GetByIdAsync(userId);
+
+
+                return Ok(new {user = userDto, jwtToken = result});
             }
 
             return BadRequest(new RegistrationResponse()
@@ -202,6 +207,19 @@ namespace API.Controllers
                 Success = false
             });
         }
+
+        /*[HttpPost]
+        [Route("Logout")]
+        private async Task<IActionResult> Logout()
+        {
+            var currentUserId = HttpContext.User.FindFirstValue("Id");
+            Console.WriteLine(currentUserId);
+            Console.WriteLine("hello");
+            var user = await _userManager.FindByIdAsync(currentUserId);
+            
+            _context.RefreshTokens.Remove(await _context.RefreshTokens.FirstOrDefaultAsync(t => t.UserId == currentUserId));
+            return Ok();
+        }*/
         
 
         private async Task<AuthResult> GenerateJwtToken(AuthUser user)
@@ -265,11 +283,30 @@ namespace API.Controllers
             try
             {
                 // validation 1 - validate jwtToken format
-                var tokenVerification = jwtTokenHandler.ValidateToken(tokenRequest.Token, _tokenValidationParameters,
-                    out var validatedToken);
+                try
+                {
+                    var tokenVerification = jwtTokenHandler.ValidateToken(tokenRequest.Token,
+                        _tokenValidationParameters,
+                        out var validatedToken);
+                }
+                catch (SecurityTokenExpiredException e)
+                {
+                    return new AuthResult()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Refresh token has expired."
+                        }
+                    };
+                }
+                
+                var tokenVerification2 = jwtTokenHandler.ValidateToken(tokenRequest.Token,
+                    _tokenValidationParameters,
+                    out var validatedToken2);
 
                 // validation 2 - validate encryption alg
-                if(validatedToken is JwtSecurityToken jwtSecurityToken)
+                if(validatedToken2 is JwtSecurityToken jwtSecurityToken)
                 {
                     var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
 
@@ -279,7 +316,7 @@ namespace API.Controllers
                 }
 
                 // validation 3 - validate expiryDate
-                var utcExpiryDate = long.Parse(tokenVerification.Claims
+                var utcExpiryDate = long.Parse(tokenVerification2.Claims
                     .FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
 
                 var expiryDate = UnixTimeStampToDateTime(utcExpiryDate);
@@ -338,7 +375,7 @@ namespace API.Controllers
                 }
 
                 // validation 7 - validate the id
-                var jti = tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+                var jti = tokenVerification2.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
                 if (storedToken.JwtId != jti)
                 {

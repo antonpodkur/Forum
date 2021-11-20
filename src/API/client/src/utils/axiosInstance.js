@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'https://localhost:5001';
+export const API_URL = 'https://localhost:5001';
 
-const $api = axios.create({
-    baseUrl: API_URL,
+export const $api = axios.create({
+    baseUrl: API_URL
 });
 
 $api.interceptors.request.use((req) => {
@@ -21,27 +21,34 @@ $api.interceptors.response.use(
             if(error.response.status === 401 && !originalResponse._retry) {
                 originalResponse._retry = true;
 
-                const result = await axios.post(`${API_URL}/api/auth/refreshtoken`, {
-                    token: localStorage.getItem('accessToken'),
-                    refreshToken: localStorage.getItem('refreshToken')
-                });
+                try{
+                    const result = await axios.post(`${API_URL}/api/auth/refreshtoken`, {
+                        token: localStorage.getItem('accessToken'),
+                        refreshToken: localStorage.getItem('refreshToken')
+                    });
 
-                if (result.jwtToken.success === true)
-                {
-                    localStorage.setItem('accessToken', result.jwtToken.token);
-                    localStorage.setItem('refreshToken', result.jwtToken.refreshToken);
+                    console.log("hello");
+                    console.log(result.data);
 
-                    originalResponse.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
-                    return originalResponse;
-                }
-                else {
+                    if (result.data.jwtToken.success === true)
+                    {
+                        localStorage.setItem('accessToken', result.data.jwtToken.token);
+                        localStorage.setItem('refreshToken', result.data.jwtToken.refreshToken);
+
+                        originalResponse.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
+                        return originalResponse;
+                    }
+                    else {
+                        window.location.href = "/login";
+                    }
+                } catch(e) {
                     window.location.href = "/login";
                 }
-
+            }
+            else if(error.response.status === 400) {
+                window.location.href = "/login";
             }
         }
         return Promise.reject(error);
     }
 );
-
-export default $api;

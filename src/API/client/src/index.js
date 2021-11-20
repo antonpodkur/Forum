@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import userStore from "./store/UserStore";
 
-const Context = createContext({userStore});
+export const Context = createContext({userStore});
 
 ReactDOM.render(
   <React.StrictMode>

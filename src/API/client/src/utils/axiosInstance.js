@@ -38,15 +38,12 @@ $api.interceptors.response.use(
                         originalResponse.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
                         return originalResponse;
                     }
-                    else {
-                        window.location.href = "/login";
-                    }
+
                 } catch(e) {
-                    window.location.href = "/login";
+                    window.location.href = "/welcome";
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
                 }
-            }
-            else if(error.response.status === 400) {
-                window.location.href = "/login";
             }
         }
         return Promise.reject(error);

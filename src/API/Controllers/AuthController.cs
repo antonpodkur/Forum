@@ -208,18 +208,28 @@ namespace API.Controllers
             });
         }
 
-        /*[HttpPost]
+        [HttpPost]
         [Route("Logout")]
-        private async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout()
         {
             var currentUserId = HttpContext.User.FindFirstValue("Id");
             Console.WriteLine(currentUserId);
             Console.WriteLine("hello");
             var user = await _userManager.FindByIdAsync(currentUserId);
-            
-            _context.RefreshTokens.Remove(await _context.RefreshTokens.FirstOrDefaultAsync(t => t.UserId == currentUserId));
+
+            var tokensToRemove = _context.RefreshTokens.Where(t => t.UserId == currentUserId).ToList();
+            if (tokensToRemove.Count != 0)
+            {
+                foreach (var token in tokensToRemove)
+                {
+                    _context.RefreshTokens.Remove(token);
+                }
+
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
             return Ok();
-        }*/
+        }
         
 
         private async Task<AuthResult> GenerateJwtToken(AuthUser user)
@@ -283,24 +293,7 @@ namespace API.Controllers
             try
             {
                 // validation 1 - validate jwtToken format
-                try
-                {
-                    var tokenVerification = jwtTokenHandler.ValidateToken(tokenRequest.Token,
-                        _tokenValidationParameters,
-                        out var validatedToken);
-                }
-                catch (SecurityTokenExpiredException e)
-                {
-                    return new AuthResult()
-                    {
-                        Success = false,
-                        Errors = new List<string>()
-                        {
-                            "Refresh token has expired."
-                        }
-                    };
-                }
-                
+
                 var tokenVerification2 = jwtTokenHandler.ValidateToken(tokenRequest.Token,
                     _tokenValidationParameters,
                     out var validatedToken2);

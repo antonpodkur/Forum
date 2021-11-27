@@ -7,9 +7,12 @@ class UserStore {
     email;
     posts;
 
+    isAuth;
+
     constructor() {
         makeAutoObservable(this);
     }
+
     setUser(user) {
         this.id = user.id;
         this.username = user.username;
@@ -17,15 +20,43 @@ class UserStore {
         this.posts = user.posts;
     }
 
+    setAuth(bool) {
+        this.isAuth = bool;
+    }
+
     async login(email, password) {
         try {
             const user = await authService.login(email, password);
             this.setUser(user);
+            this.setAuth(true);
         }catch (e)
         {
+            this.setAuth(false);
+            console.log(e.message);
+        }
+    }
+
+    async register(username, email, password) {
+        try {
+            const user = await authService.register(username,email,password);
+            this.setUser(user);
+            this.setAuth(true);
+        } catch(e) {
+            this.setAuth(false);
+            console.log(e.message);
+        }
+    }
+
+    async logout() {
+        try {
+            const user = await authService.logout();
+            this.setUser(user);
+            this.setAuth(false);
+        } catch(e) {
+            this.setAuth(false);
             console.log(e.message);
         }
     }
 }
-const userStore = new UserStore();
-export default userStore;
+
+export default UserStore;

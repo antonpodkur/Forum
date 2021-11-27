@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import postService from "../services/PostService";
 
+import HeaderAuthed from "../components/HeaderAuthed";
+import {Box, Container, Heading, Text} from "@chakra-ui/react";
+
 const HomePage = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,12 +25,15 @@ const HomePage = () => {
     if(loading) return <div>Loading</div>
     return (
         <div>
-            <h1>Home page</h1>
-            {posts.map((post) =>
-                <li key={post.id}>
-                    {post.title}
-                </li>
-            )}
+            <HeaderAuthed></HeaderAuthed>
+            <Container justifyContent={"center"}>
+                {posts.map((post) =>
+                    <Box key={post.id} my={4} boxShadow="md" p="2" rounded="md" bg="#AEC5EB">
+                        <Heading color={"gray.700"} as="h3" size="lg" my={4}>{post.title}</Heading>
+                        <Text ml={5} mb={3}>{post.body}</Text>
+                    </Box>
+                )}
+            </Container>
         </div>
     );
 };

@@ -54,7 +54,7 @@ namespace API
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = true,
                 ValidateActor = false,
-                ValidateLifetime = true,
+                ValidateLifetime = false,
                 ValidateAudience = true,
                 ValidIssuer = issuer,
                 ValidAudience = audience,

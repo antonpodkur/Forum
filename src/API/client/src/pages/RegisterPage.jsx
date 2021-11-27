@@ -1,9 +1,9 @@
 import React, {useContext, useState} from 'react';
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
-import {Link} from "react-router-dom";
 
-const LoginPage = () => {
+const RegisterPage = () => {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -11,6 +11,12 @@ const LoginPage = () => {
 
     return (
         <div>
+            <input
+                type="text"
+                value={username}
+                placeholder={'Username'}
+                onChange={e => setUsername(e.target.value)}
+            />
             <input
                 type="email"
                 value={email}
@@ -23,10 +29,9 @@ const LoginPage = () => {
                 placeholder={'Password'}
                 onChange={e => setPassword(e.target.value)}
             />
-            {/*<button onClick={e => userStore.login(email, password)}><Link to={"/"}>Log in</Link></button>*/}
-            <button onClick={e => userStore.login(email, password)}>Log in</button>
+            <button onClick={e => userStore.register(email, password)}>Log in</button>
         </div>
     );
 };
 
-export default observer(LoginPage);
+export default observer(RegisterPage);

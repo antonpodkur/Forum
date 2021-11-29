@@ -35,6 +35,7 @@ namespace API.Controllers
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly ForumContext _context;
         private readonly IUserService _userService;
+        private readonly IRefreshTokenService _refreshTokenService;
         private readonly IMapper _mapper;
 
         public AuthController(UserManager<User> userManager, 
@@ -44,6 +45,7 @@ namespace API.Controllers
             TokenValidationParameters tokenValidationParameters,
             ForumContext context,
             IUserService userService,
+            IRefreshTokenService refreshTokenService,
             IMapper mapper)
         {
             _userManager = userManager;
@@ -53,6 +55,7 @@ namespace API.Controllers
             _tokenValidationParameters = tokenValidationParameters;
             _context = context;
             _userService = userService;
+            _refreshTokenService = refreshTokenService;
             _mapper = mapper;
         }
 
@@ -216,17 +219,7 @@ namespace API.Controllers
             Console.WriteLine("hello");
             var user = await _userManager.FindByIdAsync(currentUserId);
 
-            var tokensToRemove = _context.RefreshTokens.Where(t => t.UserId == currentUserId).ToList();
-            if (tokensToRemove.Count != 0)
-            {
-                foreach (var token in tokensToRemove)
-                {
-                    _context.RefreshTokens.Remove(token);
-                }
-
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
+            await _refreshTokenService.RemoveAllTokensById(currentUserId);
             return Ok();
         }
         
@@ -264,7 +257,7 @@ namespace API.Controllers
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = jwtTokenHandler.WriteToken(token);
 
-            var refreshToken = new RefreshToken()
+            var refreshToken = new RefreshTokenDTO()
             {
                 JwtId = token.Id,
                 IsUsed = false,
@@ -275,8 +268,7 @@ namespace API.Controllers
                 Token = RandomString(35) + Guid.NewGuid()
             };
 
-            await _context.RefreshTokens.AddAsync(refreshToken);
-            await _context.SaveChangesAsync();
+            await _refreshTokenService.AddAsync(refreshToken);
             
             return new AuthResult()
             {
@@ -326,7 +318,7 @@ namespace API.Controllers
                 }
                 
                 // validation 4 - validate existance of the token
-                var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokenRequest.RefreshToken);
+                var storedToken = await _refreshTokenService.FirstOrDefaultAsync(tokenRequest.RefreshToken);
 
                 if (storedToken == null)
                 {
@@ -384,8 +376,8 @@ namespace API.Controllers
                 // update current token 
 
                 storedToken.IsUsed = true;
-                _context.RefreshTokens.Update(storedToken);
-                await _context.SaveChangesAsync();
+
+                await _refreshTokenService.UpdateAsync(storedToken);
 
                 // generate a new token
                 var dbUser = await _userManager.FindByIdAsync(storedToken.UserId);

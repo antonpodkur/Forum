@@ -7,6 +7,7 @@ namespace DAL.Abstractions.Repositories
     {
         Task<RefreshToken> GetByIdAsync(string id);
 
+        Task<RefreshToken> FirstOrDefaultAsync(string refreshToken);
         void Update(RefreshToken post);
     }
 }

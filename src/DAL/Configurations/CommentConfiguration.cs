@@ -12,11 +12,6 @@ namespace DAL.Configurations
             builder.HasIndex(c => c.Id).IsUnique();
 
             builder.Property(c => c.Text).IsRequired().HasMaxLength(10000);
-
-            /*builder.HasOne(c => c.User).WithMany(u => u.Comments)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(c => c.Post).WithMany(p => p.Comments)
-                .OnDelete(DeleteBehavior.Restrict);*/
         }
     }
 }

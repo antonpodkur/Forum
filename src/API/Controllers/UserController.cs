@@ -21,11 +21,11 @@ namespace API.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ControllerBase
     {
-        private readonly UserManager<AuthUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public UserController(UserManager<AuthUser> userManager, IUserService userService, IMapper mapper)
+        public UserController(UserManager<User> userManager, IUserService userService, IMapper mapper)
         {
             _userManager = userManager;
             _userService = userService;

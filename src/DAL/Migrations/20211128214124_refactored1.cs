@@ -1,23 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace API.Migrations
+namespace DAL.Migrations
 {
-    public partial class FixedIsUsedfield : Migration
+    public partial class refactored1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "IsUser",
+                name: "IsRevorked",
                 table: "RefreshTokens",
-                newName: "IsUsed");
+                newName: "IsRevoked");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "IsUsed",
+                name: "IsRevoked",
                 table: "RefreshTokens",
-                newName: "IsUser");
+                newName: "IsRevorked");
         }
     }
 }

@@ -14,11 +14,13 @@ using AutoMapper;
 using BLL.Abstractions;
 using BLL.DTOs;
 using BLL.Services;
+using DAL.DataContext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using DAL.Entities;
 
 namespace API.Controllers
 {
@@ -26,21 +28,21 @@ namespace API.Controllers
     [ApiController]
     public class AuthController: ControllerBase
     {
-        private readonly UserManager<AuthUser> _userManager;
-        private readonly SignInManager<AuthUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JwtConfiguration _jwtConfiguration;
         private readonly TokenValidationParameters _tokenValidationParameters;
-        private readonly AuthForumContext _context;
+        private readonly ForumContext _context;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AuthController(UserManager<AuthUser> userManager, 
-            SignInManager<AuthUser> signInManager,
+        public AuthController(UserManager<User> userManager, 
+            SignInManager<User> signInManager,
             RoleManager<IdentityRole> roleManager,
             IOptionsMonitor<JwtConfiguration> optionsMonitor, 
             TokenValidationParameters tokenValidationParameters,
-            AuthForumContext context,
+            ForumContext context,
             IUserService userService,
             IMapper mapper)
         {
@@ -74,7 +76,7 @@ namespace API.Controllers
                     });
                 }
 
-                var newUser = new AuthUser() {Email = user.Email, UserName = user.Username};
+                var newUser = new User() {Email = user.Email, UserName = user.Username};
                 var isCreated = await _userManager.CreateAsync(newUser, user.Password);
 
                 if (isCreated.Succeeded)
@@ -93,9 +95,6 @@ namespace API.Controllers
                         Username = user.Username,
                         Email = user.Email,
                     };
-
-                    userDto = await _userService.AddAsync(userDto);
-
 
                     var jwtToken = await GenerateJwtToken(newUser);
                     return Ok(new {user = userDto, jwtToken});
@@ -154,7 +153,7 @@ namespace API.Controllers
                     });
                 }
 
-                var userDto = await _userService.GetByIdAsync(existingUser.Id); 
+                var userDto = _mapper.Map<UserDTO>(existingUser);
 
                 var jwtToken = await GenerateJwtToken(existingUser);
 
@@ -232,7 +231,7 @@ namespace API.Controllers
         }
         
 
-        private async Task<AuthResult> GenerateJwtToken(AuthUser user)
+        private async Task<AuthResult> GenerateJwtToken(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -269,7 +268,7 @@ namespace API.Controllers
             {
                 JwtId = token.Id,
                 IsUsed = false,
-                IsRevorked = false,
+                IsRevoked = false,
                 UserId = user.Id,
                 AddedDate = DateTime.UtcNow,
                 ExpiryDate = DateTime.UtcNow.AddMonths(6),
@@ -355,7 +354,7 @@ namespace API.Controllers
                 }
                 
                 // validation 6 - validate if revoked
-                if (storedToken.IsRevorked)
+                if (storedToken.IsRevoked)
                 {
                     return new AuthResult()
                     {
@@ -425,4 +424,5 @@ namespace API.Controllers
         
         
     }
+    //TODO: create repository for refresh token / add it via di, add dtos in bll.
 }

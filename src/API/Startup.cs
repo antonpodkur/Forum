@@ -37,9 +37,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-
-            services.AddDbContext<AuthForumContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AuthConnection")));
-
+            
             services.AddDal(Configuration.GetConnectionString("DefaultConnection"));
             services.AddBll();
             
@@ -54,7 +52,7 @@ namespace API
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = true,
                 ValidateActor = false,
-                ValidateLifetime = false,
+                ValidateLifetime = true,
                 ValidateAudience = true,
                 ValidIssuer = issuer,
                 ValidAudience = audience,
@@ -76,10 +74,7 @@ namespace API
                     jwt.SaveToken = true;
                     jwt.TokenValidationParameters = tokenValidationParams;
                 });
-            
-            services.AddIdentity<AuthUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<AuthForumContext>().AddDefaultTokenProviders();
-            
+
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );;

@@ -11,21 +11,15 @@ namespace DAL.Configurations
         {
             builder.ToTable("Users");
             
-            builder.Property(u => u.Id).IsRequired();
-            builder.HasIndex(u => u.Id).IsUnique();
-            
-            builder.Property(s => s.Username).IsRequired(true).HasMaxLength(50);
-            builder.HasIndex(e => e.Username).IsUnique();
-            
-            builder.Property(s => s.Email).IsRequired(true).HasMaxLength(320);
-            builder.HasIndex(e => e.Email).IsUnique();
-            
-            builder.HasMany(x => x.Posts);
-            builder.HasMany(x => x.Posts).WithOne(p => p.User).HasForeignKey(u => u.UserId)
+            builder.HasMany(u => u.Posts).WithOne(p => p.User).HasForeignKey(p => p.UserId).HasPrincipalKey(u=> u.Id)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(u => u.Comments).WithOne(c => c.User).HasForeignKey(c => c.UserId)
+            builder.HasMany(u => u.Comments).WithOne(c => c.User).HasForeignKey(c => c.UserId).HasPrincipalKey(u => u.Id)
                 .OnDelete(DeleteBehavior.NoAction);
+            
+            builder.HasMany<RefreshToken>(u => u.RefreshTokens)
+                .WithOne(r => r.User)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

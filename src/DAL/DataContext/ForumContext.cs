@@ -1,10 +1,11 @@
 using DAL.Configurations;
 using DAL.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.DataContext
 {
-    public class ForumContext: DbContext
+    public class ForumContext: IdentityDbContext<User>
     {
         public class OptionsBuild
         {
@@ -26,9 +27,9 @@ namespace DAL.DataContext
         
         public static OptionsBuild ops = new OptionsBuild();
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

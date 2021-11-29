@@ -7,7 +7,6 @@ namespace DAL.Abstractions.Repositories
 {
     public interface IRepository<TEntity> where TEntity: class
     {
-        TEntity Get(string id);
         Task<IEnumerable<TEntity>> GetAllAsync();
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 

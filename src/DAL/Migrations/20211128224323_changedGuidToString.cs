@@ -2,7 +2,7 @@
 
 namespace DAL.Migrations
 {
-    public partial class ChangedNicknametousername : Migration
+    public partial class changedGuidToString : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

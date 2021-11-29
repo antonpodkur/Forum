@@ -1,16 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace DAL.Entities
 {
-    public class User
+    public class User: IdentityUser
     {
-        public Guid Id { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
         public ICollection<Post> Posts { get; set; }
         
         public ICollection<Comment> Comments { get; set; }
+        
+        public ICollection<RefreshToken> RefreshTokens { get; set; }
      }
 }

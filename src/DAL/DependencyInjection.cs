@@ -1,7 +1,9 @@
 using DAL.Abstractions.Repositories;
 using DAL.Abstractions.UnitOfWork;
 using DAL.DataContext;
+using DAL.Entities;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +19,9 @@ namespace DAL
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            
+            services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ForumContext>().AddDefaultTokenProviders();
         }
     }
 }

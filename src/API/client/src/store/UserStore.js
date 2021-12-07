@@ -57,6 +57,10 @@ class UserStore {
             console.log(e.message);
         }
     }
+
+    getUser() {
+        return {id: this.id, username: this.username, email: this.email};
+    }
 }
 
 export default UserStore;

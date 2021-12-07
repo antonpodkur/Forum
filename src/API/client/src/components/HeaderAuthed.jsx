@@ -1,6 +1,6 @@
 import React, {useContext, useEffect} from 'react';
 import {Context} from "../index";
-import {Link} from  "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {observer} from "mobx-react-lite";
 import {
     Box,
@@ -16,10 +16,15 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 const HeaderAuthed = (props) => {
 
     const {userStore} = useContext(Context);
-
+    const navigate = useNavigate();
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const handleToggle = () => (isOpen ? onClose() : onOpen());
+
+    const logout = () => {
+        userStore.logout();
+        navigate("/welcome");
+    }
 
     return (
         <Flex
@@ -60,9 +65,9 @@ const HeaderAuthed = (props) => {
                 <Button
                     variant="outline"
                     _hover={{ bg: "#AEC5EB", borderColor: "white", color: "black" }}
-                    onClick={() => userStore.logout()}
+                    onClick={() => logout()}
                 >
-                    <Link to={"/welcome"}>Log out</Link>
+                    Log out
                 </Button>
             </Box>
         </Flex>

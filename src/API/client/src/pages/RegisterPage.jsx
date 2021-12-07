@@ -1,6 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
+import {useNavigate} from "react-router-dom";
 
 const RegisterPage = () => {
     const [username, setUsername] = useState('');
@@ -8,6 +9,16 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('');
 
     const {userStore} = useContext(Context);
+    const navigate = useNavigate();
+
+    const register = (username, email, password) => {
+        try{
+            userStore.register(username, email, password);
+            navigate("/");
+        } catch (e) {
+            console.error(e.message);
+        }
+    }
 
     return (
         <div>
@@ -29,7 +40,7 @@ const RegisterPage = () => {
                 placeholder={'Password'}
                 onChange={e => setPassword(e.target.value)}
             />
-            <button onClick={e => userStore.register(email, password)}>Log in</button>
+            <button onClick={e => register(username ,email, password)}>Register</button>
         </div>
     );
 };

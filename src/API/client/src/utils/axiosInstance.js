@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_URL = 'https://localhost:5001';
+export const API_URL = 'http://localhost:5000';
 
 export const $api = axios.create({
     baseUrl: API_URL
@@ -22,7 +22,8 @@ $api.interceptors.response.use(
                 originalResponse._retry = true;
 
                 try{
-                    const result = await axios.post(`${API_URL}/api/auth/refreshtoken`, {
+                    const result = await axios.post(`${API_URL}/api/auth/refreshtoken`,
+                    {
                         token: localStorage.getItem('accessToken'),
                         refreshToken: localStorage.getItem('refreshToken')
                     });

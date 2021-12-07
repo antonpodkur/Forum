@@ -27,8 +27,7 @@ const WelcomePage = () => {
                                 <Button><Link to={"/register"}>Register</Link></Button>
                             </HStack>
                         </VStack>
-
-                    </Container>
+                    </Container>3000
                 </Flex>
         </div>
     );

@@ -1,13 +1,25 @@
 import React, {useContext, useState} from 'react';
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const {userStore} = useContext(Context);
+    const navigate = useNavigate();
+
+
+    const login = (email, password) => {
+        try{
+            userStore.login(email,password);
+            navigate("/");
+        } catch(e) {
+            console.log(e.message);
+        }
+
+    }
 
     return (
         <div>
@@ -23,8 +35,7 @@ const LoginPage = () => {
                 placeholder={'Password'}
                 onChange={e => setPassword(e.target.value)}
             />
-            {/*<button onClick={e => userStore.login(email, password)}><Link to={"/"}>Log in</Link></button>*/}
-            <button onClick={e => userStore.login(email, password)}>Log in</button>
+            <button onClick={e => login(email, password)}>Log in</button>
         </div>
     );
 };

@@ -102,7 +102,9 @@ namespace API
                 .AllowCredentials()
             );
             
+            /*
             app.UseHttpsRedirection();
+            */
 
             app.UseRouting();
 
